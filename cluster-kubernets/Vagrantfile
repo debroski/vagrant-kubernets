@@ -1,0 +1,36 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  
+    # Control Node
+    config.vm.define "control-node" do |node|
+      node.vm.box = "ubuntu/focal64" 
+      node.vm.network "private_network", type: "static", ip: "192.168.56.100"
+  
+      node.vm.provider "virtualbox" do |vb|
+        vb.memory = "2048"
+        vb.cpus = 2
+      end
+  
+      node.vm.hostname = "control-node"
+      node.vm.provision "shell", path: "provision-control-node.sh"
+      node.vbguest.auto_update = false
+    end
+  
+    # Worker 1
+    config.vm.define "worker1" do |worker1|
+      worker1.vm.box = "ubuntu/focal64"
+      worker1.vm.network "private_network", type: "static", ip: "192.168.56.101"
+  
+      worker1.vm.provider "virtualbox" do |vb|
+        vb.memory = "2048"
+        vb.cpus = 2
+      end
+  
+      worker1.vm.hostname = "worker1"
+      worker1.vm.provision "shell", path: "provision-worker.sh"
+      worker1.vbguest.auto_update = false
+    end
+  end
+  
